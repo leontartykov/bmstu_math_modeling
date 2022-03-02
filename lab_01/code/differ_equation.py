@@ -47,6 +47,25 @@ class DifferEquation:
         """
         pass
 
+    def __picard_1(self, x):
+        return pow(x, 3) / 3
+
+    def __picard_2(self, x):
+        return self.__picard_1(x) + pow(x, 7) / 63
+
+    def __picard_3(self, x):
+        return self.__picard_2(x) + 2 * pow(x, 11) / 2079 + \
+               pow(x, 15) / 59535
+
+    def __picard_4(self, x):
+        return pow(x, 31) / 109876902975 + \
+               4 * pow(x, 27) / 3341878155 + \
+               4 * pow(x, 23) / 99411543 + \
+               82 * pow(x, 19) / 37328445 + \
+               13 * pow(x, 15) / 218295 + \
+               2 * pow(x, 11) / 2079 + \
+               self.__picard_2(x)
+
     def runge_kutta_method(self):
         """
         Метод Рунге-Кутта
