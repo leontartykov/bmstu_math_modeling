@@ -1,6 +1,3 @@
-from distutils.log import error
-
-
 def input_values() -> tuple:
     """
     Ввод исходных данных
