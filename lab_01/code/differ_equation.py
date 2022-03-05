@@ -4,91 +4,89 @@ class DifferEquation:
     """
     Однородные дифференциальные уравнения
     """
-    def __init__(self, left_board: float, right_board: float, count_nodes: int):
+    def __init__(self, left_board: float, right_board: float, step:float):
         self.left_board = left_board
         self.right_board = right_board
-        self.count_nodes = count_nodes
-        self.step = (right_board - left_board) / count_nodes
-
-        self.nodes_x = []; self.nodes_u = []
+        self.step = step
         
     def info(self):
         print("Текущее состояние объекта:")
         print(f"Левая граница: {self.left_board}")
         print(f"Правая граница: {self.right_board}")
-        print(f"Количество узлов сетки: {self.count_nodes}")
         print(f"Шаг: {self.step}")
 
     def f(self, x, y):
         return x * x + y * y
 
-    def euler_method(self):
+    def euler_method(self, last_x, last_u) -> None:
         """
         Метод Эйлера
         """
-        x = self.left_board; x_end = self.right_board
-        x += self.step
-        self.nodes_x.append(0); self.nodes_u.append(0)
+        return last_u + self.step * self.f(last_x, last_u)
 
-        i = 1
-        while (x <= x_end):
-            self.nodes_x.append(x)
-            self.nodes_u.append(self.nodes_u[i-1] + 
-                                self.step * self.f(self.nodes_x[i-1], self.nodes_u[i-1]))
-            x += self.step
-            i += 1
-        #print(f"self_nodes_x = {self.nodes_x}")
-        #print(f"self_nodes_u = {self.nodes_u}")
-        return
-
-    def picard_method(self):
+    def picard_1(self, x):
         """
-        Метод Пикара
+        Метод Пикара I порядка точности
         """
-        pass
-
-    def __picard_1(self, x):
         return pow(x, 3) / 3
 
-    def __picard_2(self, x):
-        return self.__picard_1(x) + pow(x, 7) / 63
+    def picard_2(self, x):
+        """
+        Метод Пикара II порядка точности
+        """
+        return self.picard_1(x) + pow(x, 7) / 63
 
-    def __picard_3(self, x):
-        return self.__picard_2(x) + 2 * pow(x, 11) / 2079 + \
+    def picard_3(self, x):
+        """
+        Метод Пикара III порядка точности
+        """
+        return self.picard_2(x) + 2 * pow(x, 11) / 2079 + \
                pow(x, 15) / 59535
 
-    def __picard_4(self, x):
+    def picard_4(self, x):
+        """
+        Метод Пикара IV порядка точности
+        """
         return pow(x, 31) / 109876902975 + \
                4 * pow(x, 27) / 3341878155 + \
                4 * pow(x, 23) / 99411543 + \
+               2 * pow(x, 23) / 86266215 + \
                82 * pow(x, 19) / 37328445 + \
                13 * pow(x, 15) / 218295 + \
                2 * pow(x, 11) / 2079 + \
-               self.__picard_2(x)
+               self.picard_2(x)
 
-    def runge_kutta_method(self):
+    def runge_kutta_method(self, last_x, last_u):
         """
         Метод Рунге-Кутта
         при значении alpha = 1
-        """
-        self.nodes_u.clear(); self.nodes_x.clear()
-        x = self.left_board; x_end = self.right_board
-        x += self.step
-        self.nodes_x.append(0); self.nodes_u.append(0)
-
-        i = 1
-        while x <= x_end:
-            self.nodes_x.append(x)
-            self.nodes_u.append(self.nodes_u[i-1] + self.step *
-                                self.f(self.nodes_x[i-1] + self.step / 2, 
-                                       self.nodes_u[i-1] + self.step / 2 
-                                            * self.f(self.nodes_x[i-1], self.nodes_u[i-1])))
-            x += self.step
-            i += 1
-
-        #print("Рунге-Кутта")
-        #print(f"self_nodes_x = {self.nodes_x}")
-        #print(f"self_nodes_u = {self.nodes_u}")
-        return
+        """ 
+        return last_u + self.step * self.f(last_x + self.step / 2, 
+                                           last_u + self.step / 2 * self.f(last_x, last_u))
         
+    def get_table(self):
+        print("x     |Пикар I порядка │ Пикар II порядка │ Пикар III порядка │ Пикар IV порядка │ ЭЙлер │ Ругге-Кутт\n" + \
+              "─────────────────────────────────────────────────────────────────────────────────────────────────────")
+        start = self.left_board; end = self.right_board
+        last_x_runge_kutta = 0; current_x_runge_kutta = 0
+        last_u_runge_kutta = 0; current_u_runge_kutta = 0
+        last_x_euler = 0; current_x_euler = 0
+        last_u_euler = 0; current_u_euler = 0
+
+        while start <= end:
+            last_x_euler = current_x_euler; 
+            current_x_euler = start
+            last_u_euler = current_u_euler
+            current_u_euler = self.euler_method(last_x_euler, last_u_euler)
+
+            last_x_runge_kutta = current_x_runge_kutta
+            current_x_runge_kutta = start
+            last_u_runge_kutta = current_u_runge_kutta
+            current_u_runge_kutta = self.runge_kutta_method(last_x_runge_kutta, last_u_runge_kutta)
+
+            print(f"{start:4.3f} |{self.picard_1(start):15.6f} | {self.picard_2(start):16.6f}" + 
+                  f"| {self.picard_3(start):17.6f} | {self.picard_4(start):16.6f}" +
+                  f"| {current_u_euler:16.6f} | {current_u_runge_kutta:16.6f}")
+            start += self.step 
+
         

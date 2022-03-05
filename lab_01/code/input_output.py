@@ -13,9 +13,9 @@ def input_values() -> tuple:
                    "Попробуйте еще раз.")
         else:
             error_input = False
-    count_nodes = input_count_nodes()
+    step = input_step()
 
-    return (left_board, right_board, count_nodes)
+    return (left_board, right_board, step)
 
 def input_board(type_board: str) -> float:
     """
@@ -38,24 +38,23 @@ def input_board(type_board: str) -> float:
             
     return board
 
-def input_count_nodes() -> int:
+def input_step() -> int:
     """
-    Ввод количества узлов сетки
+    Ввод шага
     """
     error_input = True
-    count_nodes = str()
+    step = str()
     while (error_input == True):
-        count_nodes = input("Введите количество узлов сетки: ")
+        step = input("Введите шаг сетки: ")
         try:
-            count_nodes = int(count_nodes)
             error_input = False
-            count_nodes = int(count_nodes)
+            step = float(step)
 
-            if count_nodes <= 0:
+            if step <= 0:
                 error_input = True
                 raise ValueError
         except ValueError:
-            print(f"\nОшибка: неверно введены данные ({count_nodes})."+ 
+            print(f"\nОшибка: неверно введены данные ({step})."+ 
                    "Попробуйте еще раз.")      
 
-    return count_nodes
+    return step
