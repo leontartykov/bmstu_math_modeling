@@ -100,10 +100,10 @@ class DifferEquation:
         if step < 0:
             default_step = -default_step
 
-        while fabs(start_x) < fabs(end_x):
+        while fabs(start_x) <= fabs(end_x):
             diff_start_default_x = fabs(start_x - x_default_step)
-            if self.is_data_graph == False and diff_start_default_x <= 1e-3:
-                if step < 0:
+            if self.is_data_graph == False and diff_start_default_x <= 1e-4:
+                if step < 0 and start_x != 0:
                     self.x.insert(0, start_x)
                     self.picard_1.insert(0, picard_1_u)
                     self.picard_2.insert(0, picard_2_u)
@@ -120,9 +120,9 @@ class DifferEquation:
                     self.euler.append(current_u_euler)
                     self.runge_kutt.append(current_u_runge_kutt)
             
-            if diff_start_default_x <= 1e-3:
-                if start_x >= 0:
-                    print(f"{x_default_step:4.3f} |{picard_1_u:16.6f} | {picard_2_u:16.6f}" + 
+            if diff_start_default_x <= 1e-4:
+                if step > 0:
+                    print(f"{start_x:4.3f} |{picard_1_u:16.6f} | {picard_2_u:16.6f}" + 
                         f"| {picard_3_u:18.6f} | {picard_4_u:16.6f}" +
                         f"| {current_u_euler:13.6f} | {current_u_runge_kutt:16.6f}")
                 x_default_step += default_step

@@ -10,14 +10,6 @@ class GraphicLinear:
         self.euler = cauchy_methods_values[5]
         self.runge_kutt = cauchy_methods_values[6]
 
-        #print(self.x)
-        #print(self.picard_1)
-        #print(self.picard_2)
-        #print(self.picard_3)
-        #print(self.picard_4)
-        #print(self.euler)
-        #print(self.runge_kutt)
-
     def plot_graph(self):
         names = ["Пикар I", "Пикар II", "Пикар III", "Пикар IV", "Эйлер", "Рунге-Кутт"]
         fig, ax = pyplot.subplots(1, 1,figsize=(15,9))
