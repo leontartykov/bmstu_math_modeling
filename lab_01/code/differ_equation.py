@@ -1,3 +1,4 @@
+from email.policy import default
 from math import fabs
 from tracemalloc import start
 from point import *
@@ -82,7 +83,11 @@ class DifferEquation:
     def get_table(self):
         print("x     |Пикар I порядка │ Пикар II порядка │ Пикар III порядка │ Пикар IV порядка │    Эйлер     │    Рунге-Кутт\n" + \
               "────────────────────────────────────────────────────────────────────────────────────────────────────────────────")
-        start_x = self.left_board; end_x = self.right_board
+        self.__get_methods_values(-self.step, -self.right_board)        
+        self.__get_methods_values(self.step, self.right_board)
+
+    def __get_methods_values(self, step, end_x):
+        start_x = self.left_board; diff_start_default_x = 0
         last_x_runge_kutt = self.left_board; current_x_runge_kutt = self.left_board
         last_u_runge_kutt = self.left_board; current_u_runge_kutt = self.left_board
         last_x_euler = self.left_board; current_x_euler = self.left_board
@@ -91,25 +96,39 @@ class DifferEquation:
         picard_3_u = self.left_board; picard_4_u = self.left_board
 
         x_default_step = self.left_board
-        diff_start_default_x = 0 
-        while start_x < end_x:
+        default_step = self.default_step
+        if step < 0:
+            default_step = -default_step
+
+        while fabs(start_x) < fabs(end_x):
             diff_start_default_x = fabs(start_x - x_default_step)
             if self.is_data_graph == False and diff_start_default_x <= 1e-3:
-                self.x.append(start_x)
-                self.picard_1.append(picard_1_u)
-                self.picard_2.append(picard_2_u)
-                self.picard_3.append(picard_3_u)
-                self.picard_4.append(picard_4_u)
-                self.euler.append(current_u_euler)
-                self.runge_kutt.append(current_u_runge_kutt)
+                if step < 0:
+                    self.x.insert(0, start_x)
+                    self.picard_1.insert(0, picard_1_u)
+                    self.picard_2.insert(0, picard_2_u)
+                    self.picard_3.insert(0, picard_3_u)
+                    self.picard_4.insert(0, picard_4_u)
+                    self.euler.insert(0, current_u_euler)
+                    self.runge_kutt.insert(0, current_u_runge_kutt)
+                else:
+                    self.x.append(start_x)
+                    self.picard_1.append(picard_1_u)
+                    self.picard_2.append(picard_2_u)
+                    self.picard_3.append(picard_3_u)
+                    self.picard_4.append(picard_4_u)
+                    self.euler.append(current_u_euler)
+                    self.runge_kutt.append(current_u_runge_kutt)
             
-            if start_x >= self.left_board and diff_start_default_x <= 1e-3:
-                print(f"{x_default_step:4.3f} |{picard_1_u:16.6f} | {picard_2_u:16.6f}" + 
-                    f"| {picard_3_u:18.6f} | {picard_4_u:16.6f}" +
-                    f"| {current_u_euler:13.6f} | {current_u_runge_kutt:16.6f}")
-                x_default_step += self.default_step
+            if diff_start_default_x <= 1e-3:
+                if start_x >= 0:
+                    print(f"{x_default_step:4.3f} |{picard_1_u:16.6f} | {picard_2_u:16.6f}" + 
+                        f"| {picard_3_u:18.6f} | {picard_4_u:16.6f}" +
+                        f"| {current_u_euler:13.6f} | {current_u_runge_kutt:16.6f}")
+                x_default_step += default_step
+                
 
-            start_x += self.step
+            start_x += step
 
             last_x_euler = current_x_euler; current_x_euler = start_x
             last_u_euler = current_u_euler
@@ -124,8 +143,7 @@ class DifferEquation:
             picard_2_u = self.calc_picard_2_method(start_x)
             picard_3_u = self.calc_picard_3_method(start_x)
             picard_4_u = self.calc_picard_4_method(start_x)
-
-        self.is_data_graph = True
+        
 
     def get_graph(self):
         """
