@@ -1,0 +1,143 @@
+\chapter*{Цель работы}
+Целью работы является получение навыков решения задачи Коши для ОДУ методами Пикара и явными методами первого порядка точности (Эйлера) и второго порядка точности (Рунге-Кутта).
+
+\newpage
+\chapter{Теоретические сведения}
+
+Пусть дано ОДУ (Обыкновенное Дифференциальное уравнение) n-ого порядка по формуле (\ref{eq:ody}).
+
+\begin{equation}
+	F(x, u', u'', ... , u^{(n)} = 0)
+	\label{eq:ody}
+\end{equation}
+
+ОДУ любого порядка может быть сведено к системе ОДУ 1-ого порядка.
+
+\section{Задача Коши}
+
+\textit{Задача Коши} состоит в нахождении решения дифференциального уравнения, удовлетворяющего начальным условиям. 
+Это одна из основных задач теории дифференциальных уравнений.
+
+Имеется задача Коши по формуле (\ref{eq:ref1}).
+
+\begin{equation}
+	{\begin{cases}
+			u'(x) = f(x,u) \\
+			u(\xi) = \eta
+	\end{cases}}
+	\label{eq:ref1}
+\end{equation}
+
+Методы решения ОДУ в задачи Коши:
+
+\begin{enumerate}
+	\item аналитические;
+	\item приближенно-аналитические;
+	\item численные.
+\end{enumerate}
+
+\newpage
+\section{Методы решения задачи Коши}
+
+При отсутствии аналитического решения можно воспользоваться приближенно-аналитическим методом Пикара.
+Заменив дифференциальное уравнение интегральным получим (\ref{eq:ref2}).
+
+\begin{equation}
+	y(x)^{(s)} = \eta + \int_{\xi}^{x} f(t, y^{s-1}(t)) dt
+	\label{eq:ref2}
+\end{equation}
+
+\begin{equation}
+	y^{(0)} = \eta
+\end{equation}
+
+Метод сходится если:
+
+\begin{enumerate}
+	\item правая часть непрерывная;
+	\item выполнено условие Липшица (\ref{eq:Lip})
+\end{enumerate}
+
+\begin{equation}
+	|f(x, u_1) - f(x, u_2| \leq L |u_1-u_2|
+	\label{eq:Lip}
+\end{equation}
+где L - константа Липшица.
+
+Метод Эйлера (\ref{eq:ref3}).
+
+\begin{equation}
+	y_{n+1} = y_n + h\cdot f(x_n, y_n)
+	\label{eq:ref3}
+\end{equation}
+
+
+Метод Рунге-Кутты (\ref{eq:ref4}).
+
+\begin{equation}
+	y_{n+1} = y_n + h\cdot[(1-\alpha)k_1 + \alpha \cdot k_2]
+	\label{eq:ref4}
+\end{equation}
+
+Где $k_1$ и $k_2$ представлены как (\ref{eq:ref5}) и (\ref{eq:ref6}) соответственно. А $\alpha$ = 1 или $\frac{1}{2}$
+
+\begin{equation}
+	k_1 = f(x_n, y_n)
+	\label{eq:ref5}
+\end{equation}
+
+\begin{equation}
+	k_2 = f(x_n + \frac{h}{2\alpha}, y_n + \frac{h}{2\alpha}k_1)
+	\label{eq:ref6}
+\end{equation}
+
+\chapter{Задание и вычисления приближений для метода Пикара}
+
+Дана формула {\ref{eq:task}}.
+
+\begin{equation}
+	{\begin{cases}
+			u'(x) = u^2 + x^2 \\
+			u(0) = 0
+	\end{cases}}
+	\label{eq:task}
+\end{equation}
+
+Используя описанные выше методы построить таблицу для:
+
+\begin{enumerate}
+	\item Метода Пикара I-IV приближений.
+	\item Метод Эйлера.
+	\item Метод Рунге-Кутты.
+\end{enumerate}
+
+Приближения представлены в формулах (\ref{eq:picar_1}), (\ref{eq:picar_2}), (\ref{eq:picar_3}) и (\ref{eq:picar_4}):
+
+\begin{equation}
+	\label{eq:picar_1}
+	y^{(1)} = 0 + \int_{0}^{x} t^2 dt= \frac{x^3}{3} 
+\end{equation}
+
+\begin{equation}
+	\label{eq:picar_2}
+	y^{(2)} = 0 + \int_{0}^{x}\left[ \left( \frac{t^3}{3} \right)^2 + t^2 \right] dt = \frac{x^3}{3} + \frac{x^7}{63}
+\end{equation}
+
+\begin{equation}
+	\label{eq:picar_3}
+	\begin{split}
+		y^{(3)} = 0 + \int_{0}^{x}\left[ \left(\frac{t^7}{63} + \frac{t^3}{3} \right)^2 + t^2 \right] dt = 
+		\int_{0}^{x}\left[ \frac{t^{14}}{63^2} + \frac{2}{63*3}t^{10} + \frac{t^6}{9} + t^2 \right] = \\
+		\frac{x^3}{3} + \frac{x^7}{63} + \frac{2x^{11}}{2079} + \frac{x^{15}}{59535}
+	\end{split}
+\end{equation}
+
+\begin{equation}
+	\label{eq:picar_4}
+	\begin{split}
+		y^{(4)} = 0 + \int_{0}^{x}\left[ \left( \frac{t^3}{3} + \frac{t^7}{63} + \frac{2t^{11}}{2079} + \frac{t^{15}}{59535} \right)^2 + t^2 \right] dt = \\ 
+		\frac{x^3}{3} + \frac{x^{7}}{63} + \frac{2x^{11}}{2079} + \frac{13x^{15}}{218295} + \frac{82x^{19}}{37328445} + 
+		+ \frac{662x^{23}}{10438212015} + \\
+		+ \frac{4x^{27}}{3341878155} + \frac{x^{31}}{109876903905}
+	\end{split}
+\end{equation}
