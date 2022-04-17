@@ -1,5 +1,4 @@
 from math import exp, fabs
-from turtle import right
 
 class DifferEquation:
     EPS = 1e-4
@@ -25,13 +24,6 @@ class DifferEquation:
         du = -last_F * 3 * self.R * k / self.c
         return du
 
-    def __calc_u(self, z, ksi):
-        """
-        Вычисление u
-        """
-        Up = self.__calc_Up(z)
-        return ksi * Up
-
     def __calc_Up(self, z):
         """
         Вычисление Up
@@ -49,8 +41,6 @@ class DifferEquation:
         """
         Вычисление функции пси
         """
-        #print(f'last_F = {last_F}, last_u = {last_u}')
-        #print(f"u = {last_u},psi = {last_F - 0.393 * self.c * last_u}")
         return last_F - 0.393 * self.c * last_u
 
     def __calc_dF(self, z, u=None, last_F=None):
@@ -166,7 +156,6 @@ class DifferEquation:
         current_z += self.step
 
         while current_z < right_board:
-            #print(f'last_du = {last_du}, last_dF = {last_dF}')
             next = self.__calc_runge_cutta_iv(current_z, last_du, last_dF)
             last_du = next[0]; last_dF = next[1]
             if last_dF > max_dF:
@@ -178,8 +167,7 @@ class DifferEquation:
             F_array.append(last_dF)
             u_array.append(last_du)
             Up_array.append(Up)
-        print(f'max_dF = {max_dF}')
-        print(f"last_dF = {F_array[-1]}, last_du = {u_array[-1] * 0.393 * self.c}")
+
         return z_array, F_array, u_array, Up_array
 
     def define_dependence_u_k0(self):
@@ -191,7 +179,6 @@ class DifferEquation:
         k0_array = []
         Up = self.__calc_Up(0)
         for k0 in range(1, 30, 1):
-            print(f'k0 = {k0}')
             self.k_0 = k0 / 10000
             k0_array.append(k0)
             ksi = self.__find_suitable_ksi(self.__calc_psi)
@@ -209,9 +196,13 @@ class DifferEquation:
         u_Tw_array = []
         T_w_array = []
         Up = self.__calc_Up(0)
+        self.k_0 = 8e-4
+        self.R = 0.35
+        self.T_w = 2e3
+        self.T_0 = 1e4
+        self.p = 4
         for T_w in range(1000, 3000, 100):
             self.T_w = T_w
-            print(f'T_w = {T_w}')
             T_w_array.append(T_w)
             ksi = self.__find_suitable_ksi(self.__calc_psi)
             u_Tw = ksi * Up
@@ -228,9 +219,13 @@ class DifferEquation:
         u_T0_array = []
         T_0_array = []
         Up = self.__calc_Up(0)
+        self.k_0 = 8e-4
+        self.R = 0.35
+        self.T_w = 2e3
+        self.T_0 = 1e4
+        self.p = 4
         for T_0 in range(4000, 16000, 300):
             self.T_0 = T_0
-            print(f'T_0 = {T_0}')
             T_0_array.append(T_0)
             ksi = self.__find_suitable_ksi(self.__calc_psi)
             u_T0 = ksi * Up
@@ -247,9 +242,13 @@ class DifferEquation:
         u_p_array = []
         p_array = []
         Up = self.__calc_Up(0)
+        self.k_0 = 8e-4
+        self.R = 0.35
+        self.T_w = 2e3
+        self.T_0 = 1e4
+        self.p = 4
         for p in range(1, 16, 1):
             self.p = p
-            print(f'p = {p}')
             p_array.append(p)
             ksi = self.__find_suitable_ksi(self.__calc_psi)
             u_p = ksi * Up
@@ -266,9 +265,13 @@ class DifferEquation:
         u_R_array = []
         R_array = []
         Up = self.__calc_Up(0)
+        self.k_0 = 8e-4
+        self.R = 0.35
+        self.T_w = 2e3
+        self.T_0 = 1e4
+        self.p = 4
         for R in range(5, 70, 2):
             self.R = R / 100
-            print(f'R = {R}')
             R_array.append(R)
             ksi = self.__find_suitable_ksi(self.__calc_psi)
             u_R = ksi * Up
