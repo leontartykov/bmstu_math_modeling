@@ -1,6 +1,4 @@
-from email.policy import default
 from math import fabs
-from tracemalloc import start
 from point import *
 
 class DifferEquation:
@@ -34,11 +32,11 @@ class DifferEquation:
         """
         return x * x + y * y
 
-    def calc_euler_method(self, last_x, last_u) -> None:
+    def calc_euler_method(self, last_x, last_u, step) -> None:
         """
         Метод Эйлера
         """
-        return last_u + self.step * self.f(last_x, last_u)
+        return last_u + step * self.f(last_x, last_u)
 
     def calc_picard_1_method(self, x):
         """
@@ -72,13 +70,13 @@ class DifferEquation:
                2 * pow(x, 11) / 2079 + \
                self.calc_picard_2_method(x)
 
-    def calc_runge_kutt_method(self, last_x, last_u):
+    def calc_runge_kutt_method(self, last_x, last_u, step):
         """
         Метод Рунге-Кутта
         при значении alpha = 1
         """ 
-        return last_u + self.step * self.f(last_x + self.step / 2, 
-                                           last_u + self.step / 2 * self.f(last_x, last_u))
+        return last_u + step * self.f(last_x + step / 2, 
+                                           last_u + step / 2 * self.f(last_x, last_u))
         
     def get_table(self):
         print("x     |Пикар I порядка │ Пикар II порядка │ Пикар III порядка │ Пикар IV порядка │    Эйлер     │    Рунге-Кутт\n" + \
@@ -132,12 +130,12 @@ class DifferEquation:
 
             last_x_euler = current_x_euler; current_x_euler = start_x
             last_u_euler = current_u_euler
-            current_u_euler = self.calc_euler_method(last_x_euler, last_u_euler)
+            current_u_euler = self.calc_euler_method(last_x_euler, last_u_euler, step)
 
             last_x_runge_kutt = current_x_runge_kutt
             current_x_runge_kutt = start_x
             last_u_runge_kutt = current_u_runge_kutt
-            current_u_runge_kutt = self.calc_runge_kutt_method(last_x_runge_kutt, last_u_runge_kutt)
+            current_u_runge_kutt = self.calc_runge_kutt_method(last_x_runge_kutt, last_u_runge_kutt, step)
 
             picard_1_u = self.calc_picard_1_method(start_x)
             picard_2_u = self.calc_picard_2_method(start_x)
