@@ -4,4 +4,5 @@
 | Лабораторные  |     <p align="center">Задание    |      Статус    |
 | :-------------: |-------------|:-------------:|
 | [Lab 01](https://github.com/DeadlyHunter38/bmstu_sem_6_modeling/tree/master/lab_01)| <p align="left"> Решение задачи Коши для ОДУ приближенно-аналитическим методом и численными алгоритмами.<p>| ✅
-| [Lab 02](https://github.com/DeadlyHunter38/bmstu_sem_6_modeling/tree/master/lab_02)| <p align="left"> Решение задачи Коши для системы ОДУ.<p>| ✅
+| [Lab 02](https://github.com/DeadlyHunter38/bmstu_sem_6_modeling/tree/master/lab_02)| <p align="left"> Решение задачи Коши для системы ОДУ (Рунге-Кутт IV).<p>| ✅
+| [Lab 03](https://github.com/DeadlyHunter38/bmstu_sem_6_modeling/tree/master/lab_03)| <p align="left"> Решение задачи Коши для системы ОДУ (разностный метод).<p>| ✅
