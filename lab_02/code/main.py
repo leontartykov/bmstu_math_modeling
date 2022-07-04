@@ -1,4 +1,3 @@
-from unittest import result
 from input_output import *
 from differ_equation import *
 from graph import *
